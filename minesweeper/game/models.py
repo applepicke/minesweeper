@@ -5,7 +5,15 @@ class Map(models.Model):
     width = models.IntegerField()
     height = models.IntegerField()
 
-    def count_adj_bombs(self, x, y):
+    def mark(self, x, y):
+        contents = self._get_contents(x, y)
+
+        if contents == 'B':
+            return 'dead'
+        else if contents == 'E':
+            return self._count_adj_bombs(x, y)
+
+    def _count_adj_bombs(self, x, y):
         count = 0
         coords = [
           (x-1, y),
