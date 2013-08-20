@@ -1,10 +1,10 @@
 Here is what you need to get up and running:
 
-## Pip
+### Pip
 
 If you don't have Pip installed, install it now. Google can help you out with that one.
 
-## Virtualenv
+### Virtualenv
 
 This project uses virtualenv to isolate your dev environent. Get virtualenv with pip:
 
@@ -12,7 +12,7 @@ This project uses virtualenv to isolate your dev environent. Get virtualenv with
 pip install virtualenv
 ```
 
-# Setting up
+### Setting up
 
 Now that you have virtualenv, you need to install all the python packages required for the project.
 
@@ -25,8 +25,14 @@ pip install -r requirements.txt
 
 NOTE: If you open a new terminal or terminal tab you will need to activate your environment again with `. ENV/bin/activate`
 
-# Running
+### Running
 
 ```
 ./manage.py runserver
 ```
+
+Minesweeper should now be running on port 8000
+
+### Database
+
+The minesweeper application uses a sqlite3 database, mostly to limit how much initial setup is required to get the app up and running.
