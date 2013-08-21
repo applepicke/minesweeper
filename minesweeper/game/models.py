@@ -19,8 +19,36 @@ class Map(models.Model):
             self._change_contents(x, y, str(num_bombs))
             return num_bombs
 
-    def _get_adj_empties(self, x, y):
+    def compile_empties(self, x, y):
+        empties = set(self._get_adj_empties(x, y))
+        supers = self._get_unmarked_supers(empties)
 
+        while supers:
+            group = supers.pop()
+            new_empties = self._get_adj_empties(group[0], group[1])
+            new_supers = self._get_unmarked_supers(new_empties)
+            supers = supers.union(new_supers)
+            empties = empties.union(new_empties)
+            self._change_contents(group[0], group[1], str(group[2]))
+
+        return list(empties)
+
+    def _is_unmarked_super(self, x, y):
+        bombs = self._count_adj_bombs(x, y)
+        content = self._get_contents(x, y)
+        if bombs == 0 and content == 'E':
+            return True
+        return False
+
+
+    def _get_unmarked_supers(self, superclears):
+        supers = set([])
+        for group in superclears:
+            if group[2] == 0 and self._get_contents(group[0], group[1]) == 'E':
+                supers.add(group)
+        return supers
+
+    def _get_adj_empties(self, x, y):
         bombs = self._count_adj_bombs(x, y)
         empties = [(x, y, bombs)]
         coords = self._build_adj_coords(x, y)
@@ -34,8 +62,10 @@ class Map(models.Model):
 
             bombs = self._count_adj_bombs(pair[0], pair[1])
             pair.append(bombs)
-            empties.append(pair)
-            self._change_contents(pair[0], pair[1], str(pair[2]))
+            empties.append(tuple(pair))
+
+            if bombs != 0:
+                self._change_contents(pair[0], pair[1], str(bombs))
 
         return empties
 
@@ -115,7 +145,7 @@ class Map(models.Model):
                 self._change_contents(randx, randy, 'B')
                 is_set = True
 
-    def get_map_matrix(self):
+    def get_map_matrix(self, type):
 
         matrix = []
 
@@ -123,12 +153,27 @@ class Map(models.Model):
             row = []
             for j in range(self.width):
                 content = self._get_contents(j, i)
-                if content == 'B' or content == 'E':
-                    content = ''
+
+                # a revealing matrix will show everything
+                if type != 'reveal':
+                    if content == 'B' or content == 'E':
+                        content = ''
+
+                else:
+                    if content != 'B':
+                        content = self._count_adj_bombs(j, i)
+
                 row.append(content)
             matrix.append(row)
 
         return matrix
+
+    def check_for_win(self):
+        if not 'E' in self.data:
+            return True
+        return False
+
+
 
 
 

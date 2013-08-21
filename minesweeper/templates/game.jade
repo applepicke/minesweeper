@@ -1,7 +1,7 @@
 doctype 5
 html
   head
-    title= name
+    title= title
     link(href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css", rel="stylesheet")
     link(rel="stylesheet", type="text/css", href="/static/css/game.css")
 
@@ -15,6 +15,12 @@ html
             tr
               each cell in row
                 td.unclicked= cell
+
+    #death.endgame.hidden
+      h1 DEAD!!
+
+    #win.endgame.hidden
+      h1 WIN!!
 
     script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js")
     script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js")

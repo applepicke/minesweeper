@@ -17,8 +17,9 @@ def show_game(request, name):
     data = {
         'width': map.width,
         'height': map.height,
+        'title': 'Minesweeper - ' + map.name,
         'name': map.name,
-        'map': map.get_map_matrix()
+        'map': map.get_map_matrix('hidden')
     }
 
     return render(request, 'game.jade', data)
@@ -60,21 +61,33 @@ def mark(request, name):
         return HttpResponse('map-doesnt-exist', status=404)
 
     num_bombs = map.mark(x, y)
+    win = map.check_for_win() and num_bombs != -1
     map.save()
 
     result = {}
 
+    # User clicked on a bomb
     if num_bombs == -1:
         result['status'] = 'dead'
+        result['map'] = map.get_map_matrix('reveal')
+        map.delete()
 
+    # Hit a regular space
     elif num_bombs > 0:
         result['status'] = 'clear'
         result['num_bombs'] = num_bombs
 
+    # Hit a super space
     elif num_bombs == 0:
         result['status'] = 'superclear'
         result['num_bombs'] = num_bombs
-        result['empties'] = map._get_adj_empties(x, y)
+        result['empties'] = map.compile_empties(x, y)
+        map.save()
+
+    if win:
+        result['status'] = 'win'
+        result['map'] = map.get_map_matrix('reveal')
+        map.delete()
 
     return HttpResponse(json.dumps(result), mimetype='application/json')
 
