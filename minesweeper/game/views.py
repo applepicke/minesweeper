@@ -24,7 +24,7 @@ def show_game(request, name):
 
     return render(request, 'game.jade', data)
 
-
+# Create a new game
 def create_game(request):
     name = request.GET.get('name')
 
@@ -43,6 +43,7 @@ def create_game(request):
 
     return HttpResponse('game-created')
 
+# Check to see if a certain game exists
 def check_game(request):
     name = request.GET.get('name')
 
@@ -51,6 +52,8 @@ def check_game(request):
 
     return HttpResponse('game-doesnt-exist', status=400)
 
+# Mark a position as revealed
+# Sparks a chain reaction if player hit a super block
 def mark(request, name):
     x = int(request.GET.get('x'))
     y = int(request.GET.get('y'))

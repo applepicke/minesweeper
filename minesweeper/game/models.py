@@ -9,6 +9,7 @@ class Map(models.Model):
     height = models.IntegerField()
     num_bombs = models.IntegerField()
 
+    # Mark a coordinate as clicked
     def mark(self, x, y):
         contents = self._get_contents(x, y)
 
@@ -19,6 +20,7 @@ class Map(models.Model):
             self._change_contents(x, y, str(num_bombs))
             return num_bombs
 
+    # Perform chain reaction of supers to find all revealed coords
     def compile_empties(self, x, y):
         empties = set(self._get_adj_empties(x, y))
         supers = self._get_unmarked_supers(empties)
@@ -40,7 +42,7 @@ class Map(models.Model):
             return True
         return False
 
-
+    # Get all the supers from a list that aren't yet marked
     def _get_unmarked_supers(self, superclears):
         supers = set([])
         for group in superclears:
@@ -48,6 +50,7 @@ class Map(models.Model):
                 supers.add(group)
         return supers
 
+    # Get all empty spots adjacent to coordinate
     def _get_adj_empties(self, x, y):
         bombs = self._count_adj_bombs(x, y)
         empties = [(x, y, bombs)]
@@ -69,7 +72,7 @@ class Map(models.Model):
 
         return empties
 
-
+    # Build coordinates array
     def _build_adj_coords(self, x, y):
         coords = [
           [x-1, y],
@@ -83,6 +86,7 @@ class Map(models.Model):
         ]
         return coords
 
+    # Count the number of bombs adjacent to coordinate
     def _count_adj_bombs(self, x, y):
         count = 0
         coords = self._build_adj_coords(x, y)
@@ -105,23 +109,26 @@ class Map(models.Model):
 
         return count
 
-
+    # Transform x, y coordinate into index in the data field
     def _get_data_index(self, x, y):
         z = self.width * y
         index = z + x
         return index
 
+    # Get the contents of a single space on the map
     def _get_contents(self, x, y):
         index = self._get_data_index(x, y)
         c = self.data[index]
         return c
 
+    # Change the contents of a single space on the map
     def _change_contents(self, x, y, new_content):
         index = self._get_data_index(x, y)
         data = list(self.data)
         data[index] = new_content
         self.data = "".join(data)
 
+    # Perform initial map generation
     def generate_map(self):
         data = []
 
@@ -134,6 +141,7 @@ class Map(models.Model):
         for i in range(self.num_bombs):
             self._place_random_bomb()
 
+    # Place a single random bomb on the map
     def _place_random_bomb(self):
         is_set = False
 
@@ -145,6 +153,7 @@ class Map(models.Model):
                 self._change_contents(randx, randy, 'B')
                 is_set = True
 
+    # Get a matrix version of the map
     def get_map_matrix(self, type):
 
         matrix = []
@@ -168,6 +177,7 @@ class Map(models.Model):
 
         return matrix
 
+    # Determine whether game has been won
     def check_for_win(self):
         if not 'E' in self.data:
             return True

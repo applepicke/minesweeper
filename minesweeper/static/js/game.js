@@ -12,7 +12,7 @@ $(function () {
     mark(x, y, $(target));
   });
 
-
+  // Reveal individual position
   function reveal($cell, num) {
     $cell.removeClass('unclicked');
     $cell.addClass('revealed');
@@ -34,6 +34,7 @@ $(function () {
     }
   }
 
+  // Ask the server to mark a space as clicked
   function mark(x, y, $cell) {
     // Get out of here if it's already marked
     if (!$cell.hasClass('unclicked')) {
@@ -87,15 +88,19 @@ $(function () {
     });
   }
 
+  // Handle ending death sequence
   function handleDeath(x, y, $cell) {
     $('#death').removeClass('hidden');
   }
 
+  // Victorious winning sequence
   function handleWin() {
     win = true;
     $('#win').removeClass('hidden');
   }
 
+  // Reveal the map based on a map matrix.
+  // If no matrix, reveal open spots
   function revealMap(data) {
 
     $('#game tbody tr td').each(function () {
@@ -123,8 +128,6 @@ $(function () {
       }
     })
   }
-
-
 });
 
 
