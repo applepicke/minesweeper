@@ -1,0 +1,29 @@
+
+#title {
+  text-align: center;
+}
+
+#game {
+  margin: 0 auto;
+}
+
+table#game tbody tr td {
+  width: 30px;
+  height: 30px;
+  border: 1px solid black;
+  text-align: center;
+}
+
+table#game tbody tr td.unclicked {
+  color: #aaa;
+  background-color: #aaa;
+}
+
+table#game tbody tr td.revealed {
+  color: black;
+  background-color: #ddd;
+}
+
+table#game tbody tr td.empty {
+  color: #ddd;
+}

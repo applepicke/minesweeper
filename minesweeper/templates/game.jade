@@ -1,0 +1,21 @@
+doctype 5
+html
+  head
+    title= name
+    link(href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css", rel="stylesheet")
+    link(rel="stylesheet", type="text/css", href="/static/css/game.css")
+
+
+  body
+    #content
+      h1#title= name
+      table#game
+        tbody
+          each row in map
+            tr
+              each cell in row
+                td.unclicked= cell
+
+    script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+    script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js")
+    script(src="/static/js/game.js")

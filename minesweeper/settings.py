@@ -160,7 +160,7 @@ LOGGING = {
 }
 
 # game specific settings
-GAME_HEIGHT = 20
-GAME_WIDTH = 20
+GAME_HEIGHT = 12
+GAME_WIDTH = 12
 NUM_BOMBS = 30
 

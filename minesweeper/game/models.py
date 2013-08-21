@@ -13,12 +13,25 @@ class Map(models.Model):
         contents = self._get_contents(x, y)
 
         if contents == 'B':
-            return 'dead'
+            return -1
         elif contents == 'E':
-            return self._count_adj_bombs(x, y)
+            num_bombs = self._count_adj_bombs(x, y)
+            self._change_contents(x, y, str(num_bombs))
+            return num_bombs
 
-    def _count_adj_bombs(self, x, y):
-        count = 0
+    def _get_adj_empties(self, x, y):
+
+        empties = [[x, y]]
+        coords = self._build_adj_coords(x, y)
+
+        for pair in coords:
+            bombs = self._count_adj_bombs(pair[0], pair[1])
+            empties.append(pair)
+
+        return empties
+
+
+    def _build_adj_coords(self, x, y):
         coords = [
           (x-1, y),
           (x-1, y-1),
@@ -29,8 +42,17 @@ class Map(models.Model):
           (x, y+1),
           (x-1, y+1)
         ]
+        return coords
+
+    def _count_adj_bombs(self, x, y):
+        count = 0
+        coords = self._build_adj_coords(x, y)
 
         stack = []
+
+        # If this space is a bomb, just say so
+        if self._get_contents(x, y) == 'B':
+            return -1
 
         for pair in coords:
             out_of_bounds_x = pair[0] < 0 or pair[0] >= self.width
@@ -64,12 +86,12 @@ class Map(models.Model):
         data = []
 
         # Make empty map
-        for i in self.width * self.height:
+        for i in range(self.width * self.height):
             data.append('E')
         self.data = "".join(data)
 
         # Place the bombs
-        for i in self.num_bombs:
+        for i in range(self.num_bombs):
             self._place_random_bomb()
 
     def _place_random_bomb(self):
@@ -82,6 +104,22 @@ class Map(models.Model):
             if self._get_contents(randx, randy) == 'E':
                 self._change_contents(randx, randy, 'B')
                 is_set = True
+
+    def get_map_matrix(self):
+
+        matrix = []
+
+        for i in range(self.height):
+            row = []
+            for j in range(self.width):
+                content = self._get_contents(j, i)
+                if content == 'B' or content == 'E':
+                    content = ''
+                row.append(content)
+            matrix.append(row)
+
+        return matrix
+
 
 
 
