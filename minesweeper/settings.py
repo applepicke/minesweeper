@@ -69,6 +69,7 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files
 STATICFILES_DIRS = (
+    "minesweeper/static/",
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -87,9 +88,10 @@ SECRET_KEY = 'p^sgm_9b7g83yo+sl1@1y&9za@#h#2nmny(v*pb+uu3nsdh6u3'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
-    'django.template.loaders.filesystem.Loader',
-    'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    ('pyjade.ext.django.Loader',(
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
 )
 
 MIDDLEWARE_CLASSES = (
@@ -108,6 +110,7 @@ ROOT_URLCONF = 'minesweeper.urls'
 WSGI_APPLICATION = 'minesweeper.wsgi.application'
 
 TEMPLATE_DIRS = (
+    "minesweeper/templates/"
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
@@ -120,6 +123,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'minesweeper.game',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -154,3 +158,9 @@ LOGGING = {
         },
     }
 }
+
+# game specific settings
+GAME_HEIGHT = 20
+GAME_WIDTH = 20
+NUM_BOMBS = 30
+

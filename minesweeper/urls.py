@@ -3,6 +3,7 @@ from minesweeper.game import views as game_views
 
 urlpatterns = patterns('',
     url(r'^$', game_views.home),
-    url(r'^games/(?P<game>\w+)/$', game_views.showGame),
-    url(r'^games/(?P<game>\w+)/mark/$', game_views.mark)
+    url(r'^create_game/$', game_views.create_game),
+    url(r'^games/(?P<game>\w+)/$', game_views.show_game),
+    url(r'^games/(?P<game>\w+)/mark/$', game_views.mark),
 )

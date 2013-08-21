@@ -1,0 +1,34 @@
+#content {
+}
+
+#title {
+  text-align: center;
+}
+
+input, label {
+  display: block;
+}
+
+.game-actions {
+  width: 300px;
+  margin: 50px auto;
+}
+
+.game-actions label {
+  font-variant: small-caps;
+  font-size: 1.5em;
+}
+
+.game-actions input {
+  width: 300px;
+  margin-bottom: 10px;
+}
+
+.game-actions button {
+  width: 300px;
+  margin-top: 5px;
+}
+
+#new-game {
+
+}

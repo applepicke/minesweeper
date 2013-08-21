@@ -1,0 +1,19 @@
+doctype 5
+html
+  head
+    title Minesweeper
+    link(rel="stylesheet", type="text/css", href="/static/css/main.css")
+    link(href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css", rel="stylesheet")
+
+  body
+    #content
+      h1#title Minesweeper
+      .game-actions
+        label(for='new-game-name') game name
+        input#new-game-name(type='text')
+        button#new-game.btn.btn-primary New Game
+        button#continue-game.btn.btn-success Continue Game
+
+    script(src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js")
+    script(src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js")
+    script(src="/static/js/home.js")

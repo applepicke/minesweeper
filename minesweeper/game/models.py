@@ -1,16 +1,20 @@
 from django.db import models
+from django.conf import settings
+from random import randint
 
 class Map(models.Model):
-    data = models.CharField(max_length=None)
+    name = models.CharField(max_length=128)
+    data = models.CharField(max_length=10000)
     width = models.IntegerField()
     height = models.IntegerField()
+    num_bombs = models.IntegerField()
 
     def mark(self, x, y):
         contents = self._get_contents(x, y)
 
         if contents == 'B':
             return 'dead'
-        else if contents == 'E':
+        elif contents == 'E':
             return self._count_adj_bombs(x, y)
 
     def _count_adj_bombs(self, x, y):
@@ -55,4 +59,32 @@ class Map(models.Model):
         data = list(self.data)
         data[index] = new_content
         self.data = "".join(data)
+
+    def generate_map(self):
+        data = []
+
+        # Make empty map
+        for i in self.width * self.height:
+            data.append('E')
+        self.data = "".join(data)
+
+        # Place the bombs
+        for i in self.num_bombs:
+            self._place_random_bomb()
+
+    def _place_random_bomb(self):
+        is_set = False
+
+        while not is_set:
+            randx = randint(0, self.width - 1)
+            randy = randint(0, self.height - 1)
+
+            if self._get_contents(randx, randy) == 'E':
+                self._change_contents(randx, randy, 'B')
+                is_set = True
+
+
+
+
+
 
