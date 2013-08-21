@@ -48,6 +48,7 @@ function mark(x, y, $this) {
       y: y
     },
     success: function (result) {
+
       // Death
       if (result.status === 'dead') {
         handleDeath(x, y);
@@ -63,8 +64,17 @@ function mark(x, y, $this) {
         for (var i = 0; i < result.empties.length; i++) {
           var x = result.empties[i][0];
           var y = result.empties[i][1];
+          var bombs = result.empties[i][2];
           var $newThis = $('#game tbody tr:eq(' + y + ') td:eq(' + x + ')');
-          mark(x, y, $newThis);
+
+          if (bombs > 0) {
+            reveal($newThis, bombs)
+          }
+
+          else if (bombs === 0) {
+            mark(x, y, $newThis);
+          }
+
         }
         reveal($this, result.num_bombs);
       }

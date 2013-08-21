@@ -21,26 +21,35 @@ class Map(models.Model):
 
     def _get_adj_empties(self, x, y):
 
-        empties = [[x, y]]
+        bombs = self._count_adj_bombs(x, y)
+        empties = [(x, y, bombs)]
         coords = self._build_adj_coords(x, y)
 
         for pair in coords:
+            out_of_bounds_x = pair[0] < 0 or pair[0] >= self.width
+            out_of_bounds_y = pair[1] < 0 or pair[1] >= self.height
+
+            if out_of_bounds_x or out_of_bounds_y:
+                continue
+
             bombs = self._count_adj_bombs(pair[0], pair[1])
+            pair.append(bombs)
             empties.append(pair)
+            self._change_contents(pair[0], pair[1], str(pair[2]))
 
         return empties
 
 
     def _build_adj_coords(self, x, y):
         coords = [
-          (x-1, y),
-          (x-1, y-1),
-          (x, y-1),
-          (x+1, y-1),
-          (x+1, y),
-          (x+1, y+1),
-          (x, y+1),
-          (x-1, y+1)
+          [x-1, y],
+          [x-1, y-1],
+          [x, y-1],
+          [x+1, y-1],
+          [x+1, y],
+          [x+1, y+1],
+          [x, y+1],
+          [x-1, y+1]
         ]
         return coords
 
@@ -65,6 +74,7 @@ class Map(models.Model):
                 count += 1
 
         return count
+
 
     def _get_data_index(self, x, y):
         z = self.width * y
