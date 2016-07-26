@@ -1,3 +1,5 @@
+import re
+
 from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.utils import simplejson as json
@@ -27,6 +29,9 @@ def show_game(request, name):
 # Create a new game
 def create_game(request):
     name = request.GET.get('name')
+
+    if not re.match(r'^([0-9a-zA-Z]+)*$', name):
+        return HttpResponse('no-fancy-names', status=400)
 
     # Check if game already exists
     if Map.objects.filter(name=name).count() > 0:

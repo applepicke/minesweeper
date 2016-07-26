@@ -20,6 +20,10 @@ $(function () {
         if (result.responseText === 'game-exists') {
           $('#errors').text('Game already exists.');
         }
+        if (result.responseText === 'no-fancy-names') {
+          $('#errors').text('No fancy characters allowed in your name!');
+        }
+
       }
     });
 
